@@ -1,0 +1,5 @@
+{
+  "project_id": "project_id_from_gcp",
+  "source_image_family": "image_family_as_base_image",
+  "machine_type": "machine_type_for_gcp_like_f1_minimal"
+}

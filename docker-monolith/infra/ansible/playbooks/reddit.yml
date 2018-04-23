@@ -1,0 +1,21 @@
+---
+- name: Run reddit docker Docker container
+  hosts: reddit-docker
+  become: true
+  tasks:
+
+    - import_tasks: install-docker.yml
+
+    - name: Install ansible Docker dependencies
+      apt:
+        name: python-docker 
+        state: present
+        update_cache: yes
+
+    - name: Run Reddit container
+      docker_container:
+        name: reddit
+        image: wildermesser/otus-reddit:1.0 
+        state: started
+        ports:
+          - "9292:9292"
