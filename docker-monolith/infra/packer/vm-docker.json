@@ -24,7 +24,7 @@
   "provisioners": [
     {
       "type": "ansible",
-      "playbook_file": "ansible/playbooks/vm-docker.yml"
+      "playbook_file": "ansible/playbooks/packer-docker.yml"
     }
    ]
 }
