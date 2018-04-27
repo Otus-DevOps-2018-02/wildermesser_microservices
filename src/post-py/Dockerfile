@@ -1,9 +1,10 @@
-FROM python:3.6.0-alpine
+FROM alpine:latest
+RUN apk update && apk add python3
 
 WORKDIR /app
 ADD . /app
 
-RUN pip install -r /app/requirements.txt
+RUN pip3 install -r /app/requirements.txt
 
 ENV POST_DATABASE_HOST post_db
 ENV POST_DATABASE posts
