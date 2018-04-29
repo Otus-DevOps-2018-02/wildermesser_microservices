@@ -1,0 +1,30 @@
+{
+  "variables": {
+    "project_id": null,
+    "source_image_family": null,
+    "machine_type": "f1-micro"
+  },
+  "builders": [
+    {
+    "type": "googlecompute",
+    "project_id": "{{user `project_id`}}",
+    "image_name": "vm-docker-{{timestamp}}",
+    "image_family": "vm-docker",
+    "source_image_family": "{{user `source_image_family`}}",
+    "zone": "europe-west1-b",
+    "ssh_username": "appuser",
+    "machine_type": "{{user `machine_type`}}",
+    "disk_size": "10",
+    "disk_type": "pd-standard",
+    "image_description": "Ubuntu 16.04 with docker",
+    "network": "default",
+    "tags": "vm-test"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "ansible",
+      "playbook_file": "ansible/playbooks/packer-docker.yml"
+    }
+   ]
+}

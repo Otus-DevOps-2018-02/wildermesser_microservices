@@ -1,0 +1,17 @@
+---
+projectId: linen-works-198110
+keyFileName: ~/.config/gcloud/application_default_credentials.json
+
+hostvars:
+  - status
+  - internalIP: /networkInterfaces/0/networkIP
+  - externalIP: /networkInterfaces/0/accessConfigs/0/natIP
+  - machine_type: /machineType
+    captureRe: '[^/]+(?=/$|$)'
+  - tags: /tags/items
+ 
+groups:
+  - zone
+  - machine_type
+  - status
+  - tags
