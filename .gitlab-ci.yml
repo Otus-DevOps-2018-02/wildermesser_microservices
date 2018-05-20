@@ -31,6 +31,12 @@ build:
     - docker build -t $IMAGE_TAG reddit
     - docker push $IMAGE_TAG
 
+test:
+  stage: test
+  services:
+    - mongo:latest 
+  script:
+    - docker run $IMAGE_TAG ruby simpletest.rb
 branch review:
   stage: review
   variables:

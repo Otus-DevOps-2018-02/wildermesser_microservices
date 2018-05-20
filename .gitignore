@@ -1,5 +1,4 @@
 variables.json
-terraform.tfvars
 *.backup
 lock.json
 .terraform
