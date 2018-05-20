@@ -1,0 +1,22 @@
+version: '3.3'
+services:
+  mongo:
+    image: mongo:latest
+    volumes:
+      - post_db:/data/db
+    networks:
+      intnet:
+  app:
+    image: wildermesser/gitlab-ci-2:latest
+    environment:
+      DATABASE_URL: mongo
+    networks:
+      intnet:
+    ports:
+      - 80:9292/tcp
+
+volumes:
+  post_db:
+
+networks:
+  intnet:
