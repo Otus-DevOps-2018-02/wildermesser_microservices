@@ -37,7 +37,7 @@ test:
     - mongo:latest
     - docker:dind
   script:
-    - docker run $IMAGE_TAG ruby simpletest.rb
+    - docker run -e DATABSE_URL=mongo $IMAGE_TAG ruby simpletest.rb
 branch review:
   stage: review
   variables:
