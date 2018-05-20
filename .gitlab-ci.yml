@@ -33,8 +33,6 @@ build:
 
 test:
   stage: test
-  services:
-    - mongo:latest 
   script:
     - docker run $IMAGE_TAG ruby simpletest.rb
 branch review:
