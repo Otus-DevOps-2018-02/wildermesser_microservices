@@ -52,7 +52,7 @@ branch review:
     - ssh appuser@$ENV_ADDRESS sudo docker-compose down
     - ssh appuser@$ENV_ADDRESS sudo docker-compose up -d
   environment:
-    name: branch/dyn-$CI_COMMIT_REF_NAME
+    name: branch/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.gitlab.smbh.tk
     on_stop: stop_review
   only:
@@ -70,7 +70,7 @@ stop_review:
     - terraform destroy -auto-approve -var machine_name=$CI_ENVIRONMENT_SLUG -var dns_record_name=$CI_ENVIRONMENT_SLUG -var-file=terraform.tfvars
   when: manual
   environment:
-    name: branch/dyn-$CI_COMMIT_REF_NAME
+    name: branch/$CI_COMMIT_REF_NAME
     url: http://$CI_ENVIRONMENT_SLUG.gitlab.smbh.tk
     action: stop
 
