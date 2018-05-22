@@ -61,7 +61,7 @@ services:
       - back_net
 
   cloudprober:
-    image: $USER_NAME/cloudprober
+    image: $USERNAME/cloudprober
     networks:
        - back_net
 volumes:
