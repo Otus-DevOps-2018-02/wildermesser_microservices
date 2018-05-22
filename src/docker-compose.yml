@@ -56,9 +56,14 @@ services:
   mongo-exporter:
     image: forekshub/percona-mongodb-exporter
     environment:
-      MONGODB_URL: mongodb://mongo:27017
+      MONGODB_URL: mongodb://post_db:27017
     networks: 
       - back_net
+
+  cloudprober:
+    image: $USER_NAME/cloudprober
+    networks:
+       - back_net
 volumes:
   prometheus_data:
   post_db:
