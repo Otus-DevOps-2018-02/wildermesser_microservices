@@ -24,17 +24,17 @@ cloudprober:
 login: 
 		docker login -u $(USER_NAME) -p $(DOCKER_PASS)
 
-push-comment: login
+push-comment: commet login
 		docker push $(USER_NAME)/comment
 
-push-post: login
+push-post: post login
 		docker push $(USER_NAME)/post
 
-push-ui: login
+push-ui: ui login
 		docker push $(USER_NAME)/ui
 
-push-prometheus: login
+push-prometheus: prometheus login
 		docker push $(USER_NAME)/prometheus
 
-push-cloudprober: login
+push-cloudprober: cloudprober login
 		docker push $(USER_NAME)/cloudprober
