@@ -1,4 +1,4 @@
-$(USER_NAME)=wildermesser
+USER_NAME=wildermesser
 
 default: all
 
