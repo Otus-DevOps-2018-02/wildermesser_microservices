@@ -1,36 +1,97 @@
-image: ruby:2.4.2
+image: wildermesser/dind-tf
 
- 
 stages:
   - build
   - test
-  - deploy
+  - review
+  - stage
+  - production
 
 variables:
-  DATABASE_URL: 'mongodb://mongo/user_posts'
+  DOCKER_DRIVER: overlay2
+  EVN_ADDRESS: localhost
+  IMAGE_TAG: wildermesser/$CI_COMMIT_REF_NAME
+
+services:
+  - docker:dind
 
 before_script:
-  - cd reddit
-  - bundle install 
+  - echo "$ENV_PRIV_KEY" | tr -d '\r' > infra/terraform/files/id_rsa
+  - chmod 700 infra/terraform/files/id_rsa
+  - echo \"private_key\":\"$GLOUD_PRIV_KEY\"\} >> infra/terraform/files/account.json
+  - eval $(ssh-agent -s)
+  - ssh-add infra/terraform/files/id_rsa
+  - mkdir -p ~/.ssh
+  - chmod 700 ~/.ssh
+  - docker login -u wildermesser -p $REGISTRY_PASS
 
-build_job:
+build:
   stage: build
   script:
-    - echo 'Building'
+    - docker build -t $IMAGE_TAG reddit
+    - docker push $IMAGE_TAG
 
-test_unit_job:
+test:
   stage: test
   services:
     - mongo:latest
+    - docker:dind
   script:
-    - ruby simpletest.rb 
-
-test_integration_job:
-  stage: test
+    - docker run -e DATABSE_URL=mongo $IMAGE_TAG ruby simpletest.rb
+branch review:
+  stage: review
+  variables:
+    BACKEND_NAME: "prefix=terraform/state-$CI_ENVIRONMENT_SLUG"
   script:
-    - echo 'Testing 2'
+    - cd infra/terraform
+    - terraform init -backend-config=$BACKEND_NAME -backend-config="credentials=files/account.json"
+    - terraform apply -auto-approve -var machine_name=$CI_ENVIRONMENT_SLUG -var dns_record_name=$CI_ENVIRONMENT_SLUG -var-file=terraform.tfvars
+    - ENV_ADDRESS=$(terraform output external_ip)
+    - ssh-keyscan -t rsa $ENV_ADDRESS > ~/.ssh/known_hosts
+    - scp ../docker/docker-compose.yml appuser@$ENV_ADDRESS:/home/appuser
+    - ssh appuser@$ENV_ADDRESS sudo docker-compose down
+    - ssh appuser@$ENV_ADDRESS sudo docker-compose up -d
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.gitlab.smbh.tk
+    on_stop: stop_review
+  only:
+    - branches
+  except:
+    - master
 
-deploy_job:
-  stage: deploy
+stop_review:
+  stage: review
+  variables:
+    BACKEND_NAME: "prefix=terraform/state-$CI_ENVIRONMENT_SLUG"
+  script:
+    - cd infra/terraform
+    - terraform init -backend-config=$BACKEND_NAME -backend-config="credentials=files/account.json"
+    - terraform destroy -auto-approve -var machine_name=$CI_ENVIRONMENT_SLUG -var dns_record_name=$CI_ENVIRONMENT_SLUG -var-file=terraform.tfvars
+  when: manual
+  environment:
+    name: branch/$CI_COMMIT_REF_NAME
+    url: http://$CI_ENVIRONMENT_SLUG.gitlab.smbh.tk
+    action: stop
+
+staging:
+  stage: stage
+  when: manual
+  only:
+    - /^\d+\.\d+.\d+/
   script:
     - echo 'Deploy'
+  environment:
+    name: stage
+    url: https://beta.example.com
+
+production:
+  stage: production
+  when: manual
+  only:
+    - /^\d+\.\d+.\d+/
+  script:
+    - echo 'Deploy'
+  environment:
+    name: production
+    url: https://example.com

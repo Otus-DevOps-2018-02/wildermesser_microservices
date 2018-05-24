@@ -1,0 +1,7 @@
+project = "linen-works-198110"
+public_key_path = "files/id_rsa.pub"
+private_key_path = "files/id_rsa"
+machine_type = "g1-small"
+disk_size = "10"
+dns_zone_name = "gitlab"
+dns_zone_fqn = "gitlab.smbh.tk."
