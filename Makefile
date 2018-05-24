@@ -2,9 +2,9 @@ USER_NAME=wildermesser
 
 default: all
 
-all: comment post ui prometheus cloudprober push
+all: comment post ui prometheus cloudprober alertmanager push 
 
-push: push-comment push-post push-ui push-prometheus push-cloudprober
+push: push-comment push-post push-ui push-prometheus push-cloudprober push-alertmanager
 
 comment:
 		cd src/comment && sh docker_build.sh
@@ -20,6 +20,9 @@ prometheus:
 
 cloudprober:
 		docker build -t $(USER_NAME)/cloudprober monitoring/cloudprober
+
+alertmanager:
+		docker build -t $(USER_NAME)/alertmanager monitoring/alertmanager
 
 login: 
 		docker login -u $(USER_NAME) -p $(DOCKER_PASS)
@@ -38,3 +41,6 @@ push-prometheus: prometheus login
 
 push-cloudprober: cloudprober login
 		docker push $(USER_NAME)/cloudprober
+
+push-alertmanager: alertmanager login
+		docker push $(USER_NAME)/alertmanager
