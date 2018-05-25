@@ -37,7 +37,7 @@ services:
   cloudprober:
     image: $USERNAME/cloudprober
     networks:
-       - back_net
+      - back_net
 
   cadvisor:
     image: google/cadvisor:v0.29.0
@@ -73,6 +73,14 @@ services:
       - 9093:9093 
     networks: 
       - back_net
+  
+  telegraf:
+    image: ${USERNAME}/telegraf
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - back_net
+
       
 volumes:
   prometheus_data:
