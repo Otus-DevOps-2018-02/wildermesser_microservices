@@ -8,6 +8,7 @@ gem 'puma'
 gem 'mongo'
 gem 'json'
 gem 'rack-test'
+gem 'test-unit'
 
 group :development do
     gem 'capistrano',         require: false
