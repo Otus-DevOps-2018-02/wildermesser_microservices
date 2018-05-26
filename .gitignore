@@ -4,3 +4,4 @@ lock.json
 .terraform
 terraform.tfstate
 .env
+.bundle
