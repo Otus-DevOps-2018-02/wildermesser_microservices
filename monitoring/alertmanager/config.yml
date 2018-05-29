@@ -1,10 +1,22 @@
 global:
   slack_api_url: 'https://hooks.slack.com/services/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'
 
+  smtp_from: alertmanager@mailhost
+  smtp_smarthost: mailhost:mailport
+  smtp_auth_username: username
+  smtp_auth_password: "password"
+
 route:
-  receiver: 'slack-notifications'
+  receiver: 'email-notifications'
+  routes:
+    - receiver: 'email-notifications'
+      continue: true
+    - receiver: 'slack-notifications'
 
 receivers:
 - name: 'slack-notifications'
   slack_configs:
   - channel: '#alexey_lapukhov'
+- name: 'email-notifications'
+  email_configs:
+    - to: admin@uralgufk.ru

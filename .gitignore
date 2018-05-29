@@ -5,3 +5,4 @@ lock.json
 terraform.tfstate
 .env
 .bundle
+docker-201803-5a1f4be737fd.json

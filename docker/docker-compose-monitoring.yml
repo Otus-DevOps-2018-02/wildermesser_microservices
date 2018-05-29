@@ -26,12 +26,12 @@ services:
       - '--collector.filesystem.ignored-mount-points="^/(sys|proc|dev|host|etc)($$|/)"'
     networks:
       - back_net
-  
+
   mongo-exporter:
     image: forekshub/percona-mongodb-exporter
     environment:
       MONGODB_URL: mongodb://post_db:27017
-    networks: 
+    networks:
       - back_net
 
   cloudprober:
@@ -48,11 +48,11 @@ services:
       - '/var/lib/docker/:/var/lib/docker:ro'
     ports:
       - '8080:8080'
-    networks: 
+    networks:
       - back_net
 
   grafana:
-    image: grafana/grafana:5.0.0
+    image: ${USERNAME}/grafana
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
@@ -62,7 +62,7 @@ services:
       - prometheus
     ports:
       - 3000:3000
-    networks: 
+    networks:
       - back_net
 
   alertmanager:
@@ -70,10 +70,10 @@ services:
     command:
       - '--config.file=/etc/alertmanager/config.yml'
     ports:
-      - 9093:9093 
-    networks: 
+      - 9093:9093
+    networks:
       - back_net
-  
+
   telegraf:
     image: ${USERNAME}/telegraf
     volumes:
@@ -81,7 +81,18 @@ services:
     networks:
       - back_net
 
-      
+  stackdriver:
+    image: ${USERNAME}/stackdriver
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=application_default_credentials.json
+      - STACKDRIVER_EXPORTER_GOOGLE_PROJECT_ID=docker-201803
+      - STACKDRIVER_EXPORTER_MONITORING_METRICS_TYPE_PREFIXES=compute.googleapis.com/instance/cpu,compute.googleapis.com/instance/disk
+    ports:
+      - 9255:9255
+    networks:
+      - back_net
+
+
 volumes:
   prometheus_data:
   grafana_data:
