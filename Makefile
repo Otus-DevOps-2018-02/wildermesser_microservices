@@ -34,7 +34,7 @@ stackdriver:
 login:
 		docker login -u $(USER_NAME) -p $(DOCKER_PASS)
 
-push-comment: commet login
+push-comment: comment login
 		docker push $(USER_NAME)/comment
 
 push-post: post login

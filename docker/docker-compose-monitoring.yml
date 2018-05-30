@@ -86,7 +86,7 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=application_default_credentials.json
       - STACKDRIVER_EXPORTER_GOOGLE_PROJECT_ID=docker-201803
-      - STACKDRIVER_EXPORTER_MONITORING_METRICS_TYPE_PREFIXES=compute.googleapis.com/instance/cpu,compute.googleapis.com/instance/disk
+      - STACKDRIVER_EXPORTER_MONITORING_METRICS_TYPE_PREFIXES=compute.googleapis.com/instance/cpu,compute.googleapis.com/instance/disk,compute.googleapis.com/instance/network
     ports:
       - 9255:9255
     networks:
