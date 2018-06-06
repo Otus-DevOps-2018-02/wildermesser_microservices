@@ -5,6 +5,7 @@ GEM
     bson_ext (1.5.1)
     et-orbi (1.0.8)
       tzinfo
+    json (2.1.0)
     mongo (2.4.3)
       bson (>= 4.2.1, < 5.0.0)
     mustermann (1.0.0)
@@ -26,18 +27,22 @@ GEM
     tilt (2.0.8)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2018.5)
+      tzinfo (>= 1.0.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   bson_ext
+  json
   mongo
   prometheus-client
   puma
   rack
   rufus-scheduler
   sinatra
+  tzinfo-data
 
 BUNDLED WITH
-   1.15.4
+   1.16.2
