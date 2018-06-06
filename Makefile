@@ -1,10 +1,10 @@
-$(USER_NAME)=wildermesser
+USER_NAME=wildermesser
 
 default: all
 
-all: comment post ui prometheus cloudprober push
+all: comment post ui prometheus cloudprober alertmanager telegraf grafana push
 
-push: push-comment push-post push-ui push-prometheus push-cloudprober
+push: push-comment push-post push-ui push-prometheus push-cloudprober push-alertmanager push-telegraf push-grafana
 
 comment:
 		cd src/comment && sh docker_build.sh
@@ -21,10 +21,20 @@ prometheus:
 cloudprober:
 		docker build -t $(USER_NAME)/cloudprober monitoring/cloudprober
 
-login: 
+alertmanager:
+		docker build -t $(USER_NAME)/alertmanager monitoring/alertmanager
+
+telegraf:
+		docker build -t $(USER_NAME)/telegraf monitoring/telegraf
+
+grafana:
+				docker build -t $(USER_NAME)/grafana monitoring/grafana
+stackdriver:
+				docker build -t $(USER_NAME)/stackdriver monitoring/stackdriver
+login:
 		docker login -u $(USER_NAME) -p $(DOCKER_PASS)
 
-push-comment: commet login
+push-comment: comment login
 		docker push $(USER_NAME)/comment
 
 push-post: post login
@@ -38,3 +48,12 @@ push-prometheus: prometheus login
 
 push-cloudprober: cloudprober login
 		docker push $(USER_NAME)/cloudprober
+
+push-alertmanager: alertmanager login
+		docker push $(USER_NAME)/alertmanager
+
+push-telegraf: telegraf login
+		docker push $(USER_NAME)/telegraf
+
+push-grafana: grafana login
+				docker push $(USER_NAME)/grafana
