@@ -2,7 +2,7 @@ resource "google_container_cluster" "primary" {
   project            = "docker-201803"
   name               = "cluster-tf"
   zone               = "us-central1-a"
-  initial_node_count = 2
+  initial_node_count = 3
 
   master_auth {
     username = ""
