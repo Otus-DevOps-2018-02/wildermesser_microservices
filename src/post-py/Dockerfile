@@ -1,5 +1,5 @@
 FROM alpine:latest
-RUN apk update && apk add python3
+RUN apk update && apk add python3 gcc musl-dev python3-dev
 
 WORKDIR /app
 ADD . /app
