@@ -1,7 +1,7 @@
 resource "google_container_cluster" "primary" {
   project            = "docker-201803"
   name               = "cluster-tf"
-  zone               = "us-central1-a"
+  zone               = "europe-west2-a"
   initial_node_count = 3
 
   master_auth {
@@ -23,8 +23,8 @@ resource "google_container_cluster" "primary" {
       "https://www.googleapis.com/auth/monitoring",
     ]
 
-    disk_size_gb = 10
-    machine_type = "g1-small"
+    disk_size_gb = 20
+    machine_type = "n1-standard-2"
 
     tags = ["kube-tf-node"]
   }
