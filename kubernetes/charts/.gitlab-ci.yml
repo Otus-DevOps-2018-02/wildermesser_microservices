@@ -42,7 +42,7 @@ production:
   environment:
     name: production
     url: http://production
-  when: manual
+  #when: manual
   only:
     refs:
       - master
