@@ -2,7 +2,7 @@ resource "google_container_cluster" "primary" {
   project            = "docker-201803"
   name               = "cluster-tf"
   zone               = "europe-west2-a"
-  initial_node_count = 3
+  initial_node_count = 2
 
   master_auth {
     username = ""
@@ -24,7 +24,7 @@ resource "google_container_cluster" "primary" {
     ]
 
     disk_size_gb = 20
-    machine_type = "n1-standard-2"
+    machine_type = "g1-small"
 
     tags = ["kube-tf-node"]
   }
