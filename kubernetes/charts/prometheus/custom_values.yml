@@ -4,7 +4,7 @@ rbac:
 alertmanager:
   ## If false, alertmanager will not be installed
   ##
-  enabled: false
+  enabled: true
 
   # Defines the serviceAccountName to use when `rbac.create=false`
   serviceAccountName: default
@@ -43,7 +43,7 @@ alertmanager:
   ingress:
     ## If true, alertmanager Ingress will be created
     ##
-    enabled: false
+    enabled: true
 
     ## alertmanager Ingress annotations
     ##
@@ -54,9 +54,8 @@ alertmanager:
     ## alertmanager Ingress hostnames
     ## Must be provided if Ingress is enabled
     ##
-    hosts: []
-    #   - alertmanager.domain.com
-
+    hosts: 
+      - alertmanager
     ## alertmanager Ingress TLS configuration
     ## Secrets must be manually created in the namespace
     ##
@@ -78,7 +77,7 @@ alertmanager:
     ## If true, alertmanager will create/use a Persistent Volume Claim
     ## If false, use emptyDir
     ##
-    enabled: true
+    enabled: false
 
     ## alertmanager data Persistent Volume access modes
     ## Must match those of existing PV or dynamic provisioner
@@ -149,7 +148,7 @@ alertmanager:
     loadBalancerSourceRanges: []
     servicePort: 80
     # nodePort: 30000
-    type: ClusterIP
+    type: NodePort
 
 ## Monitors ConfigMap changes and POSTs to a URL
 ## Ref: https://github.com/jimmidyson/configmap-reload
@@ -567,26 +566,36 @@ pushgateway:
 ## alertmanager ConfigMap entries
 ##
 alertmanagerFiles:
-  alertmanager.yml: |-
+  alertmanager.yml: 
     global:
-      # slack_api_url: ''
+      slack_api_url: 'https://hooks.slack.com/services/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'
 
     receivers:
-      - name: default-receiver
-        # slack_configs:
-        #  - channel: '@you'
-        #    send_resolved: true
+      - name: 'slack-notifications'
+        slack_configs:
+        - channel: '#alexey_lapukhov'
 
     route:
       group_wait: 10s
       group_interval: 5m
-      receiver: default-receiver
+      receiver: 'slack-notifications'
       repeat_interval: 3h
 
 ## Prometheus server ConfigMap entries
 ##
 serverFiles:
-  alerts: {}
+  alerts: 
+    groups:
+    - name: alert.rules
+      rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          description: '{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute'
+          summary: 'Instance {{ $labels.instance }} down'
   rules: {}
 
   prometheus.yml:
