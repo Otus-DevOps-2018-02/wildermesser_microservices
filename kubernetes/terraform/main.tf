@@ -4,6 +4,7 @@ resource "google_container_cluster" "primary" {
   zone               = "europe-west2-a"
   initial_node_count = 2
 
+
   master_auth {
     username = ""
     password = ""
