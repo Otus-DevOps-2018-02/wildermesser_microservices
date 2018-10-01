@@ -1,0 +1,17 @@
+---
+kibana:
+  ingress:
+    enabled: true
+    hosts: {reddit-kibana}
+  env:
+    ELASTICSEARCH_URL: http://elasticsearch-logging:9200
+
+pvc:
+  size: 2Gi
+  storageclass: standard
+
+es:
+  version: v5.6.4
+
+fluentd:
+  version: v2.0.2

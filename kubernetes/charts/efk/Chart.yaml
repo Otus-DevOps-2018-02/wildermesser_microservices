@@ -1,0 +1,7 @@
+---
+name: efk
+version: 0.1.0
+description: OTUS sample efk chart
+maintainers:
+  - name: Aleksei Lapukhov
+    email: my@gmail.com
